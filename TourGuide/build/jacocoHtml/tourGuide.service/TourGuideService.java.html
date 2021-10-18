@@ -70,11 +70,11 @@ public class TourGuideService {
 <span class="nc" id="L70">	}</span>
 	
 	public List&lt;Provider&gt; getTripDeals(User user) {
-<span class="nc" id="L73">		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -&gt; i.getRewardPoints()).sum();</span>
-<span class="nc" id="L74">		List&lt;Provider&gt; providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(), </span>
-<span class="nc" id="L75">				user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);</span>
-<span class="nc" id="L76">		user.setTripDeals(providers);</span>
-<span class="nc" id="L77">		return providers;</span>
+<span class="pc" id="L73">		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -&gt; i.getRewardPoints()).sum();</span>
+<span class="fc" id="L74">		List&lt;Provider&gt; providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(), </span>
+<span class="fc" id="L75">				user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);</span>
+<span class="fc" id="L76">		user.setTripDeals(providers);</span>
+<span class="fc" id="L77">		return providers;</span>
 	}
 	
 	public VisitedLocation trackUserLocation(User user) {

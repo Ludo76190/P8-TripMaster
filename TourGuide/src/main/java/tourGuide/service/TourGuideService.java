@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import tourGuide.Dto.RecentUserLocationDto;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.Dto.NearbyAttractionDto;
 import tourGuide.Dto.NearestAttractionDto;
@@ -171,6 +172,17 @@ public class TourGuideService {
 	private Date getRandomTime() {
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(new Random().nextInt(30));
 		return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
+	}
+
+	public List<RecentUserLocationDto> getAllUsersCurrentLocation() {
+		List<User> userList = this.getAllUsers();
+		List<RecentUserLocationDto> recentUserLocationDtos = new CopyOnWriteArrayList<>();
+
+		for (User user : userList) {
+			recentUserLocationDtos.add(new RecentUserLocationDto(user.getUserId().toString(), user.getUserName(), user.getLastVisitedLocation().location));
+		}
+
+		return recentUserLocationDtos;
 	}
 
 	public UserPreferences setUserPreferences(String username, UserPreferences userPreferences) {

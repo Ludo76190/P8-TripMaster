@@ -12,8 +12,10 @@ import org.junit.Test;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
+import org.springframework.beans.factory.annotation.Autowired;
 import rewardCentral.RewardCentral;
 import tourGuide.Dto.NearbyAttractionDto;
+import tourGuide.Dto.RecentUserLocationDto;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
@@ -21,6 +23,12 @@ import tourGuide.user.User;
 import tripPricer.Provider;
 
 public class TestTourGuideService {
+
+	@Autowired
+	private GpsUtil gpsUtil;
+
+	@Autowired
+	private RewardCentral rewardCentral;
 
 	@Test
 	public void getUserLocation() {
@@ -125,6 +133,19 @@ public class TestTourGuideService {
 		
 		assertEquals(5, providers.size());
 	}
-	
+
+	@Test
+	public void getAllCurrentUserLocations() {
+		//GpsUtilProxyService gpsUtil = new GpsUtilProxyServiceImpl();
+		RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentral);
+		InternalTestHelper.setInternalUserNumber(0);
+		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+
+		int nbUsers = tourGuideService.getAllUsers().size();
+
+		List<RecentUserLocationDto> recentUserLocationDtos = tourGuideService.getAllUsersCurrentLocation();
+
+		assertEquals(recentUserLocationDtos.size(), nbUsers);
+	}
 	
 }

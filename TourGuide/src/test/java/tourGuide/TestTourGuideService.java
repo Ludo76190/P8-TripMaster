@@ -1,27 +1,32 @@
 package tourGuide;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.UUID;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import rewardCentral.RewardCentral;
 import tourGuide.Dto.NearbyAttractionDto;
 import tourGuide.Dto.RecentUserLocationDto;
+import tourGuide.Dto.UserPreferencesDto;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
+import tourGuide.user.UserPreferences;
 import tripPricer.Provider;
 
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TestTourGuideService {
 
 	@Autowired
@@ -40,7 +45,7 @@ public class TestTourGuideService {
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
 		tourGuideService.tracker.stopTracking();
-		assertTrue(visitedLocation.userId.equals(user.getUserId()));
+		assertEquals(visitedLocation.userId, user.getUserId());
 	}
 	
 	@Test
@@ -146,6 +151,20 @@ public class TestTourGuideService {
 		List<RecentUserLocationDto> recentUserLocationDtos = tourGuideService.getAllUsersCurrentLocation();
 
 		assertEquals(recentUserLocationDtos.size(), nbUsers);
+	}
+
+	@Test
+	public void userUpdatePreferences() {
+		UserPreferencesDto userPreferencesDTO = new UserPreferencesDto();
+		userPreferencesDTO.setNumberOfAdults(2);
+		userPreferencesDTO.setTripDuration(3);
+		userPreferencesDTO.setCurrency("USD");
+
+		UUID userUUID = UUID.fromString("098c2423-879e-52f2-01d2-f73eb8d04840");
+		User user = new User(userUUID, "internalUserTest", "0600000000", "internalUsertest@test.com");
+
+		user.setUserPreferences(new UserPreferences(userPreferencesDTO));
+		Assert.assertEquals(user.getUserPreferences().getNumberOfAdults(), userPreferencesDTO.getNumberOfAdults());
 	}
 	
 }

@@ -16,6 +16,7 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.Dto.RecentUserLocationDto;
+import tourGuide.Dto.UserPreferencesDto;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.Dto.NearbyAttractionDto;
 import tourGuide.Dto.NearestAttractionDto;
@@ -193,5 +194,11 @@ public class TourGuideService {
 			return user.getUserPreferences();
 		}
 		return null;
+	}
+
+	public UserPreferences userUpdatePreferences(String userName, UserPreferencesDto userPreferencesDTO) {
+		User user = getUser(userName);
+		user.setUserPreferences(new UserPreferences(userPreferencesDTO));
+		return user.getUserPreferences();
 	}
 }

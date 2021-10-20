@@ -3,14 +3,12 @@ package tourGuide;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.jsoniter.output.JsonStream;
 
 import gpsUtil.location.VisitedLocation;
+import tourGuide.Dto.UserPreferencesDto;
 import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
 import tripPricer.Provider;
@@ -76,6 +74,10 @@ public class TourGuideController {
     private User getUser(String userName) {
     	return tourGuideService.getUser(userName);
     }
-   
+
+    @PutMapping("/update/Preferences")
+    public String updatePreferences(@RequestParam String userName, @RequestBody UserPreferencesDto userPreferencesDTO) {
+        return JsonStream.serialize(new UserPreferencesDto(userName, tourGuideService.userUpdatePreferences(userName, userPreferencesDTO)));
+    }
 
 }

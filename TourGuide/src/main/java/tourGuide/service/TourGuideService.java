@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -93,6 +96,32 @@ public class TourGuideService {
 		user.addToVisitedLocations(visitedLocation);
 		rewardsService.calculateRewards(user);
 		return visitedLocation;
+	}
+
+	public void newTrackUserLocation(List<User> userList) {
+		ExecutorService executorService = Executors.newFixedThreadPool(300);
+
+		for (User user : userList) {
+			Runnable runnableTask = () -> {
+				trackUserLocation(user);
+			};
+			executorService.execute(runnableTask);
+		}
+
+		executorService.shutdown();
+
+		try {
+			boolean isExecutorFinished = executorService.awaitTermination(15, TimeUnit.MINUTES);
+			if (!isExecutorFinished) {
+				logger.error("newTrackUserLocation does not finish in 15 minutes.");
+				executorService.shutdownNow();
+			} else {
+				logger.debug("newTrackUserLocation finished before the 15 minutes.");
+			}
+		} catch (InterruptedException e) {
+			logger.error("executorService was Interrupted : " + e.getMessage());
+			executorService.shutdownNow();
+		}
 	}
 
 	public NearbyAttractionDto getNearByAttractions(VisitedLocation visitedLocation) {

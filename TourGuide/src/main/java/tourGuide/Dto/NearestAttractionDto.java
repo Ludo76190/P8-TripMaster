@@ -1,10 +1,9 @@
 package tourGuide.Dto;
 
-
-import gpsUtil.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import tourGuide.beans.Location;
 
 @Getter
 @Setter

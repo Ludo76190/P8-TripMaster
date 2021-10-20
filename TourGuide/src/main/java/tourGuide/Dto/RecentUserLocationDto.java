@@ -1,7 +1,6 @@
 package tourGuide.Dto;
 
-
-import gpsUtil.location.Location;
+import tourGuide.beans.Location;
 
 public class RecentUserLocationDto {
     private String userId;

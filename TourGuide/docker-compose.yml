@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  tourGuide:
+    depends_on:
+      - gpsUtil
+      - rewardCentral
+      - tripPricer
+    image: tourguide
+    ports:
+      - "8080:8080"
+    restart: always
+  gpsUtil:
+    image: gpsutil
+    expose:
+      - "8081"
+    restart: always
+  rewardCentral:
+    image: rewardcentral
+    expose:
+      - "8082"
+    restart: always
+  tripPricer:
+    image: trippricer
+    expose:
+      - "8083"
+    restart: always

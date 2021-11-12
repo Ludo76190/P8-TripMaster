@@ -2,10 +2,7 @@ package tourGuide.service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +21,7 @@ public class RewardsService {
     private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
     // proximity in miles
-    private int defaultProximityBuffer = 10000;
+    private int defaultProximityBuffer = 10;
     private int proximityBuffer = defaultProximityBuffer;
     private int attractionProximityRange = 200;
 
@@ -54,7 +51,7 @@ public class RewardsService {
 
         for (VisitedLocation visitedLocation : userLocations) {
             for (Attraction attraction : attractions) {
-                if (user.getUserRewards().stream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))) {
+                if(user.getUserRewards().parallelStream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))) {
                     if (nearAttraction(visitedLocation, attraction)) {
                         user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user.getUserId())));
                     }
@@ -86,19 +83,19 @@ public class RewardsService {
     }
 
     public void newCalculateRewards(List<User> userList) {
-        ExecutorService executorService = Executors.newFixedThreadPool(800);
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
 
         for (User user : userList) {
             Runnable runnableTask = () -> {
                 calculateRewards(user);
             };
+
             executorService.execute(runnableTask);
         }
-
         executorService.shutdown();
 
         try {
-            boolean isExecutorFinished = executorService.awaitTermination(25, TimeUnit.MINUTES);
+            boolean isExecutorFinished = executorService.awaitTermination(20, TimeUnit.MINUTES);
             if (!isExecutorFinished) {
                 logger.error("calculateRewards does not finish in 20 minutes elapsed time");
                 executorService.shutdownNow();

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * FeignClient interface for tripPricer proxy on port 8084
+ * FeignClient interface for tripPricer proxy on port 8083
  */
 
 @FeignClient(name = "tripPricer", url="http://localhost:8083")

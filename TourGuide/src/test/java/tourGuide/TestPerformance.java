@@ -29,15 +29,15 @@ public class TestPerformance {
     GpsUtilProxyService gpsUtil;
     @Autowired
     RewardCentralProxyService rewardCentral;
-    @Autowired
-    RewardsService rewardsService;
+    //@Autowired
+    //RewardsService rewardsService;
 
     @Test
     public void newHighVolumeTrackLocation() {
 
         RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentral);
         // Users should be incremented up to 100,000, and test finishes within 15 minutes
-        InternalTestHelper.setInternalUserNumber(10000);
+        InternalTestHelper.setInternalUserNumber(100000);
         TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
 
         List<User> allUsers;
@@ -55,9 +55,9 @@ public class TestPerformance {
 
     @Test
     public void newHighVolumeGetRewards() {
-
+        RewardsService rewardsService = new RewardsService(gpsUtil, rewardCentral);
         // Users should be incremented up to 100,000, and test finishes within 20 minutes
-        InternalTestHelper.setInternalUserNumber(10);
+        InternalTestHelper.setInternalUserNumber(100000);
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
@@ -68,6 +68,7 @@ public class TestPerformance {
         allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
 
         rewardsService.newCalculateRewards(allUsers);
+        //allUsers.forEach(u -> rewardsService.calculateRewards(u));
 
         for (User user : allUsers) {
             assertTrue(user.getUserRewards().size() > 0);

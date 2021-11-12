@@ -15,20 +15,9 @@ import java.util.UUID;
 @FeignClient(name = "gpsUtil", url = "http://localhost:8081")
 public interface GpsUtilProxy {
 
-    /**
-     * call GpsUtil proxy for getUserLocation
-     *
-     * @param userId uuid User
-     * @return Visited location class
-     */
     @GetMapping(value = "/userLocation")
     VisitedLocation getUserLocation(@RequestParam UUID userId);
 
-    /**
-     * call GpsUtil proxy for getattraction
-     *
-     * @return all attractions
-     */
     @GetMapping(value = "/attractions")
     List<Attraction> getAttractions();
 

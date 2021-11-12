@@ -10,13 +10,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "rewardCentral", url="http://localhost:8082")
 public interface RewardCentralProxy {
 
-    /**
-     * call RewardCentral proxy for attraction reward point
-     *
-     * @param attractionId uudi Attraction Id visited
-     * @param userId       uuid fot user Id
-     * @return reward points for the attraction
-     */
     @GetMapping(value = "/getAttractionRewardPoints")
     int getAttractionRewardPoints(@RequestParam String attractionId, @RequestParam String userId);
 

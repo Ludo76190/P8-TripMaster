@@ -1,6 +1,7 @@
 package tourGuide;
 
 import com.jsoniter.output.JsonStream;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tourGuide.Dto.UserPreferencesDto;
@@ -22,6 +23,7 @@ public class TourGuideController {
         return "Greetings from TourGuide!";
     }
 
+    @ApiOperation(value = "Get the most recent location for a user")
     @GetMapping("/getLocation")
     public String getLocation(@RequestParam String userName) {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
@@ -37,17 +39,20 @@ public class TourGuideController {
     // The distance in miles between the user's location and each of the attractions.
     // The reward points for visiting each Attraction.
     //    Note: Attraction reward points can be gathered from RewardsCentral
+    @ApiOperation(value = "Get the closest five tourist attractions to the user whatever the distance")
     @GetMapping("/getNearbyAttractions")
     public String getNearbyAttractions(@RequestParam String userName) {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
         return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
     }
 
+    @ApiOperation(value = "Get the list of user's rewards")
     @GetMapping("/getRewards")
     public String getRewards(@RequestParam String userName) {
         return JsonStream.serialize(tourGuideService.getUserRewards(getUser(userName)));
     }
 
+    @ApiOperation(value = "Get a list of every user's most recent location")
     @GetMapping("/getAllCurrentLocations")
     public String getAllCurrentLocations() {
         // TODO: Get a list of every user's most recent location as JSON
@@ -63,6 +68,7 @@ public class TourGuideController {
         return JsonStream.serialize(tourGuideService.getAllUsersCurrentLocation());
     }
 
+    @ApiOperation(value = "Get a list of of trip deals for a given user")
     @GetMapping("/getTripDeals")
     public String getTripDeals(@RequestParam String userName) {
         List<Provider> providers = tourGuideService.getTripDeals(getUser(userName));
@@ -73,6 +79,7 @@ public class TourGuideController {
         return tourGuideService.getUser(userName);
     }
 
+    @ApiOperation(value = "Set given user preferences for the user")
     @PutMapping("/update/Preferences")
     public String updatePreferences(@RequestParam String userName, @RequestBody UserPreferencesDto userPreferencesDTO) {
         return JsonStream.serialize(new UserPreferencesDto(userName, tourGuideService.userUpdatePreferences(userName, userPreferencesDTO)));

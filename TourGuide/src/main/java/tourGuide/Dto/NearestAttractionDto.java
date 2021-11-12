@@ -15,4 +15,14 @@ public class NearestAttractionDto {
     private double distanceUserToAttraction;
     private int rewardPoints;
 
+/*    public double getDistanceUserToAttraction() {
+        return distanceUserToAttraction;
+    }
+
+    public NearestAttractionDto(String attractionName, Location attractionLocation, double distanceUserToAttraction, int rewardPoints) {
+        this.attractionName = attractionName;
+        this.attractionLocation = attractionLocation;
+        this.distanceUserToAttraction = distanceUserToAttraction;
+        this.rewardPoints = rewardPoints;
+    }*/
 }

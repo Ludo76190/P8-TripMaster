@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
@@ -46,15 +45,6 @@ public class TestRewardsService {
         assertEquals(1, userRewards.size());
     }
 
-	/*@Test
-	public void isWithinAttractionProximity() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
-		Attraction attraction = gpsUtil.getAttractions().get(0);
-		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
-	}*/
-
-    //@Ignore // Needs fixed - can throw ConcurrentModificationException
     @Test
     public void nearAllAttractions() {
         //GpsUtilProxyService gpsUtil = new GpsUtilProxyServiceImpl();
